@@ -16,6 +16,7 @@ A version of this program can be found at https://diorden.neocities.org/dolfin/d
 a0.3.1
 - Reverted load/save file buttons back to links
 - JS code refactored, replaced for-loop iterators with forEach methods
+- Refactored object initialisers
 
 a0.3.0
 - Accounts and transactions visible on the transaction list can now be removed
