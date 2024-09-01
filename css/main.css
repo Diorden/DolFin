@@ -60,7 +60,6 @@ footer {
   background: black;
   border: 0.5rem ridge;
   padding: 0.5rem;
-  margin: 2rem;
   text-decoration: none;
 }
 .hyperButton:hover { background: red; }

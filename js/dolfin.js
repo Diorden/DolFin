@@ -9,7 +9,8 @@ function addAccount() {
   let account = {
     "name": accName,
     "balance": accBal,
-    "percentFromIncome": accPercent / 100
+    "percentFromIncome": accPercent / 100,
+    "ID": accounts.length
   };
 
   accounts.push(account);
@@ -38,7 +39,8 @@ function addTransaction() {
     "accountName": accountName,
     "itemSubPeriod": itemSubPeriod,
     "renewalTime": renewalTime,
-    "category": transCategory
+    "category": transCategory,
+    "ID": transactions.length
   };
 
   transactions.push(transaction);
@@ -53,13 +55,13 @@ function removeTransaction(ID) {
 }
 
 function applyTransaction(transaction) {
-  for (let ID=0; ID<accounts.length; ID++) {
-    if ((accounts[ID].name).toLowerCase() === transaction.accountName) {
-      transaction.accountName = accounts[ID].name;
-      accounts[ID].balance -= transaction.cost;
+  accounts.forEach((account) => {
+    if ((account.name).toLowerCase() === transaction.accountName) {
+      transaction.accountName = account.name;
+      account.balance -= transaction.cost;
       return;
     }
-  }
+  })
   console.log(`${transaction.accountName} is not a valid account name.`);
 }
 
@@ -68,12 +70,12 @@ function applyIncome() {
   let accountName = (document.querySelector("#incomeAccName").value).toLowerCase();
   let accountFound = false;
   
-  for (let ID=0; ID<accounts.length; ID++) {
-    if (accountName === accounts[ID].name.toLowerCase() || accountName === "all" || accountName === "") {
+  accounts.forEach((account) => {
+    if (accountName === account.name.toLowerCase() || accountName === "all" || accountName === "") {
       accountFound = true;
-      accounts[ID].balance += income * accounts[ID].percentFromIncome;
+      account.balance += income * account.percentFromIncome;
     }
-  }
+  })
   
   if (!accountFound)
     console.log(`${accountName} is not a valid account name.`);
@@ -82,12 +84,8 @@ function applyIncome() {
 }
 
 
-async function loadData() {
-  // Load data from file
-}
-
-
 function updateDownloadHREF() {
+  const accountsDL = document.querySelector("#accountsDL");
   const jsonAccounts = JSON.stringify(accounts);
   const blob = new Blob([jsonAccounts], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -100,8 +98,9 @@ function updateOverview() {
   let transactionView = `<table><tr><th colspan="6">Transactions</th></tr><tr><th>Name</th><th>Cost</th><th>Date</th><th>Category</th><th>Account</th><th>Delete</th></tr>`;
   let subscriptionView = `<table><tr><th colspan="5">Subscriptions</th></tr><tr><th>Name</th><th>Cost</th><th>Renews</th><th>Category</th><th>Delete</th></tr>`;
   
-  for (let ID=0; ID<accounts.length; ID++)
-    overview += `<tr><td>${accounts[ID].name}</td><td>${accounts[ID].balance}</td><td><button class="deleteButton" onclick="removeAccount(${ID})">X</button></td></tr>`;
+  accounts.forEach((account) => {
+    overview += `<tr><td>${account.name}</td><td>${account.balance}</td><td><button class="deleteButton" onclick="removeAccount(${account.ID})">X</button></td></tr>`; 
+  })
   
   for (let ID = transactions.length - 1; ID > transactions.length - 6 && ID>=0; ID--) {
     const { name, cost, date, accountName, itemSubPeriod, renewalTime, category } = transactions[ID]
@@ -126,7 +125,7 @@ function update() {
 }
 
 
-const accountsDL = document.querySelector("#accountsDL");
+
 let accounts = JSON.parse(localStorage.getItem("accountList")) || [];
 let transactions = JSON.parse(localStorage.getItem("transactionList")) || [];
 let fileHandle;
