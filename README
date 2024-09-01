@@ -1,4 +1,15 @@
-Version History
+DolFin is a personal project I've been working on since mid August. I am in the need of a program that could help me manage my finances and help control my spending habits, and I also wish to start building projects to help me grow as a programmer.
+
+It is a financial-management web application that allows you to control where your money goes and track spending habits and possible money sinks. I want to implement features to enable the flow of money between accounts, debt tracking, budget calculators and more, but for now I need to get the program both functional and presentable.
+
+I aim to have basic functionality down by the end of September. And yes, the 3-bit CSS color scheme is gouhlish and unprofessional. Not a priority for now.
+
+A version of this program can be found at https://diorden.neocities.org/dolfin/dolfinblog, which I keep up to date in parallel with the version in this repository.
+
+
+
+
+### Version History
 
 a0.3.0
 - Accounts and transactions visible on the transaction list can now be removed
