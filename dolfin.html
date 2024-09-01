@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="author" content="Di'orden">
+    <meta name="description" content="This is a work-in-progress page for a financial management project.">
+    <title>Dolfin alpha 0.3.0</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/app.css">
+
+  </head>
+
+  <body>
+
+    <header class="header el">
+      <nav>
+        <a href="dolfinblog.html" class="hyperButton">&lt;&lt; Back</a>
+      </nav>
+      <h1>Dolfin Financial Manager</h1>
+      <p>Unfinished, little functionality right now. Move along.</p>
+    </header>
+
+    <main>
+
+      <section name="Overview">
+        <h2>Overview</h2>
+        <div class="overview">
+          <div id="accountView"></div>      <!-- Tables imported from localData by JS -->
+          <div id="transactionView"></div>
+          <div id="subscriptionView"></div>
+          <div> 
+            <button id="accountsDL">Save Account File</button>
+            <button id="accountsUL">Load Account File</button>
+          </div>
+        </div>
+      </section>
+
+      
+      <div class="forms">
+
+        <form>
+          <h2>Create Account</h2> 
+          <div class="accountForm">
+            <h3>Name</h3>
+            <h3>Opening Balance</h3>
+            <h3>Desired Percentage of Income</h3>
+            <div></div> <!-- Blank space -->
+            <div><input type="text" id="accName"></div>
+            <div><input type="number" id="accBal"></div>
+            <div><input type="text" id="accPercent"></div>
+            <button type="button" onclick="addAccount()">Create Account</button>
+          </div>
+        </form>
+
+        <form>
+          <h2>Income</h2>
+          <div class="incomeForm">
+            <h3>Income</h3>
+            <h3>Account Name (leave blank to distribute income across all accounts)</h3>
+            <div></div> <!-- Blank space -->
+            <div><input type="number" id="income"></div>
+            <div><input type="text" id="incomeAccName"></div>
+            <button type="button" onclick="applyIncome()">Apply Income</button>
+          </div>
+        </form>
+
+        <form>
+          <h2>Transaction</h2>
+          <div class="transactionForm">
+            <h3>Item</h3>
+            <h3>Cost</h3>
+            <h3>Account</h3>
+            <div><input type="text" id="transName"></div>
+            <div><input type="number" id="transCost"></div>
+            <div><input type="text" id="transAccName"></div>
+            <h3>Date (if today, leave blank)</h3>
+            <h3>Subscription</h3>
+            <h3>Category</h3>
+            <div><input type="date" id="transDate"></div>
+            <div>
+              <select name="itemSubTime" id="itemSubTime">
+                <option value="none">None</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+              </select>
+              <label for="renewalTime">every:</label><input type="number" id="renewalTime">
+            </div>
+            <div><input type="text" id="transCategory"></div>
+            <div></div>
+            <button type="button" onclick="addTransaction()">Record Transaction</button>
+
+          </div>
+        </form>
+      </div>
+
+    </main>
+
+    <footer>
+      <p>Can you dig it?
+      <span class="pageInfo">Made with HTML 5<br>Updated: 31/08/24<br>22:46 GMT</span>
+      </p><br>
+      <p align="center"><a href="/">&copy; Di'orden</a></p>
+    </footer>
+
+  </body>
+  
+  <script src="js/dolfin.js"></script>
+  
+</html>

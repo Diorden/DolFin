@@ -1,0 +1,108 @@
+/* PALLETE
+RED       
+LIME
+BLUE
+AQUA
+FUCHSIA
+YELLOW
+BLACK
+WHITE
+*/
+
+
+html {
+	background-color: blue;
+}
+
+body {
+  font-family: Monospace;
+  font-size: 16px;
+	color: white;
+	/*margin-left: 1rem;
+	margin-right: 1rem;*/
+}
+
+
+header {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background: black;
+  border: 10px ridge aqua;
+  border-bottom: none;
+  padding: 3rem 1rem 1rem 3rem;
+  padding-bottom: 1rem;
+  font-weight: bold;
+  color: aqua;
+} 
+
+main {
+  background: black;
+  border: 10px ridge yellow;
+  border-top: dotted yellow;
+  border-bottom: dotted yellow;
+  padding: 1rem;
+}
+
+footer {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background: black;
+  border: 10px ridge lime;
+  border-top: none;
+  padding: 1rem;
+  color: lime;
+  font-style: italic;  
+}
+
+
+.hyperButton {
+  color: aqua;
+  background: black;
+  border: 0.5rem ridge;
+  padding: 0.5rem;
+  margin: 2rem;
+  text-decoration: none;
+}
+.hyperButton:hover { background: red; }
+
+.pageInfo {
+  float: right;
+}
+
+.box {
+  background-color: black; 
+  margin: 1rem;
+  padding-left: 1rem;
+}
+
+
+.todo   { color: red;    }
+.todo s { color: lime;   }
+.todo u { color: yellow; }
+
+  
+a                 { color: aqua;   }
+a:visited         { color: fuchsia; }
+a:hover, a:focus  { color: white;   }
+
+
+h1, h2 { text-align: center; }
+
+hr { color: white; }
+
+
+table {
+  padding: 1rem;
+  margin: 0.5rem;
+}
+
+td { 
+  border: 1px solid white; 
+  padding: 0 0.5rem;
+}
+
+th {
+  border: 1px solid fuchsia;
+  padding: 0.5rem;
+  margin: 0.5rem;
+}
