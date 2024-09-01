@@ -2,14 +2,11 @@
 
 
 function addAccount() {
-  let accName = document.querySelector("#accName").value;
-  let accBal = parseInt(document.querySelector("#accBal").value);
-  let accPercent = document.querySelector("#accPercent").value;
 
   let account = {
-    "name": accName,
-    "balance": accBal,
-    "percentFromIncome": accPercent / 100,
+    "name": document.querySelector("#accName").value,
+    "balance": parseInt(document.querySelector("#accBal").value),
+    "percentFromIncome": document.querySelector("#accPercent").value / 100,
     "ID": accounts.length
   };
 
@@ -24,22 +21,15 @@ function removeAccount(ID) {
 }
 
 function addTransaction() {
-  let transName = document.querySelector("#transName").value;
-  let transCost = parseInt(document.querySelector("#transCost").value);
-  let transDate = document.querySelector("#transDate").value;
-  let itemSubPeriod = document.querySelector("#itemSubTime").value;
-  let renewalTime = parseInt(document.querySelector("#renewalTime").value);
-  let accountName = (document.querySelector("#transAccName").value).toLowerCase();
-  let transCategory = document.querySelector("#transCategory").value;
-
+  
   let transaction = {
-    "name": transName,
-    "cost": transCost,
-    "date": transDate,
-    "accountName": accountName,
-    "itemSubPeriod": itemSubPeriod,
-    "renewalTime": renewalTime,
-    "category": transCategory,
+    "name": document.querySelector("#transName").value,
+    "cost": parseInt(document.querySelector("#transCost").value),
+    "date": document.querySelector("#transDate").value,
+    "accountName": (document.querySelector("#transAccName").value).toLowerCase(),
+    "itemSubPeriod": document.querySelector("#itemSubTime").value,
+    "renewalTime": parseInt(document.querySelector("#renewalTime").value),
+    "category": document.querySelector("#transCategory").value,
     "ID": transactions.length
   };
 
