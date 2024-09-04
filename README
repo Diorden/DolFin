@@ -14,9 +14,15 @@ a0.3.2
 - Numbers with 2 decimal places now supported.
 
 a0.3.1
+<<<<<<< HEAD
 - Reverted load/save file buttons back to links.
 - JS code refactored, replaced for-loop iterators with forEach methods.
 - Refactored object initialisers.
+=======
+- Reverted load/save file buttons back to links
+- JS code refactored, replaced for-loop iterators with forEach methods
+- Refactored object initialisers
+>>>>>>> 434a7933bba3559394b7c8877d46f5e08aba476d
 
 a0.3.0
 - Accounts and transactions visible on the transaction list can now be removed.
