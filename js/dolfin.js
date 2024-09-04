@@ -10,11 +10,7 @@ function addAccount() {
   
   let account = {
     "name": document.querySelector("#accName").value,
-<<<<<<< HEAD
     "balance": balanceInt,
-=======
-    "balance": parseInt(document.querySelector("#accBal").value),
->>>>>>> 434a7933bba3559394b7c8877d46f5e08aba476d
     "percentFromIncome": document.querySelector("#accPercent").value / 100,
     "ID": accounts.length
   };
@@ -31,7 +27,6 @@ function removeAccount(ID) {
 
 function addTransaction() {
   
-<<<<<<< HEAD
   let costStr = document.querySelector("#transCost").value;
   let costInt = parseInt(costStr.replace('.', ''));
 
@@ -40,11 +35,6 @@ function addTransaction() {
   let transaction = {
     "name": document.querySelector("#transName").value,
     "cost": costInt,
-=======
-  let transaction = {
-    "name": document.querySelector("#transName").value,
-    "cost": parseInt(document.querySelector("#transCost").value),
->>>>>>> 434a7933bba3559394b7c8877d46f5e08aba476d
     "date": document.querySelector("#transDate").value,
     "accountName": (document.querySelector("#transAccName").value).toLowerCase(),
     "itemSubPeriod": document.querySelector("#itemSubTime").value,
