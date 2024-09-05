@@ -5,8 +5,21 @@ function addAccount() {
 
   let balanceStr = document.querySelector("#accBal").value;
   let balanceInt = parseInt(balanceStr.replace('.', ''));
-  
-  balanceInt *= checkDecimalSeperator(balanceStr) ? 1 : 100;
+
+  switch (countDecimalPlaces(balanceStr)) {
+    case 0:
+      balanceInt *= 100;
+      break;
+    case 1:
+      balanceInt *= 10;
+      break;
+    case 2:
+      balanceInt *= 1;
+      break;
+    default:
+      alert("Input Error: Currency input has too many decimal places.");
+      return;
+  }
   
   let account = {
     "name": document.querySelector("#accName").value,
@@ -25,12 +38,27 @@ function removeAccount(ID) {
   update();
 }
 
+
 function addTransaction() {
   
   let costStr = document.querySelector("#transCost").value;
   let costInt = parseInt(costStr.replace('.', ''));
 
-  costInt *= checkDecimalSeperator(costStr) ? 1 : 100;
+  
+  switch (countDecimalPlaces(costStr)) {
+    case 0:
+      costInt *= 100;
+      break;
+    case 1:
+      costInt *= 10;
+      break;
+    case 2:
+      costInt *= 1;
+      break;
+    default:
+      alert("Input Error: Currency input has too many decimal places.");
+      return;
+  }
   
   let transaction = {
     "name": document.querySelector("#transName").value,
@@ -71,7 +99,20 @@ function applyIncome() {
   let accountFound = false;
   let incomeInt = parseInt(incomeStr.replace('.', ''));
   
-  incomeInt *= checkDecimalSeperator(incomeStr) ? 1 : 100;
+  switch (countDecimalPlaces(incomeStr)) {
+    case 0:
+      incomeInt *= 100;
+      break;
+    case 1:
+      incomeInt *= 10;
+      break;
+    case 2:
+      incomeInt *= 1;
+      break;
+    default:
+      alert("Input Error: Currency input has too many decimal places.");
+      return;
+  }
   
   accounts.forEach((account) => {
     if (accountName === account.name.toLowerCase() || accountName === "all" || accountName === "") {
@@ -81,20 +122,22 @@ function applyIncome() {
   })
   
   if (!accountFound)
-    console.log(`${accountName} is not a valid account name.`);
+    alert(`${accountName} is not a valid account name.`);
     
   update();
 }
 
-function checkDecimalSeperator(numberStr) {
-  for (let i=0; i<numberStr.length; i++) {
-    if (numberStr[i] === '.')
-      return true;
-  }
-  return false;
-}
 
-/*function countDecimalPlaces(*/
+function countDecimalPlaces(numberStr) {
+  let reachedDecimal = false;
+  let numberOfDecimalPlaces = 0;
+  for (let i=0; i<numberStr.length; i++) {
+    numberOfDecimalPlaces += reachedDecimal ? 1 : 0;  /* If a decimal has been reached, count this value as a decimal place. */
+    if (numberStr[i] === '.')
+      reachedDecimal = true;
+  }
+  return numberOfDecimalPlaces;
+}
 
 
 function updateDownloadHREF() {
