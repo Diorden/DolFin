@@ -10,6 +10,9 @@ A version of this program can be found at https://diorden.neocities.org/dolfin/d
 
 ### Version History
 
+a0.3.4
+- Refactored decimal place handler.
+
 a0.3.3
 - Numbers with up to 2 decimal places are supported.
 

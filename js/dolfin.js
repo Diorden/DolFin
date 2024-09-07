@@ -4,23 +4,14 @@
 function addAccount() {
 
   let balanceStr = document.querySelector("#accBal").value;
-  let balanceInt = parseInt(balanceStr.replace('.', ''));
-
-  switch (countDecimalPlaces(balanceStr)) {
-    case 0:
-      balanceInt *= 100;
-      break;
-    case 1:
-      balanceInt *= 10;
-      break;
-    case 2:
-      balanceInt *= 1;
-      break;
-    default:
-      alert("Input Error: Currency input has too many decimal places.");
-      return;
+  
+  if (countDecimalPlaces(balanceStr) > 2) {
+    alert("Input Error: Currency input has too many decimal places.");
+    return;
   }
   
+  let balanceInt = fixDecimalPlaces(balanceStr)
+
   let account = {
     "name": document.querySelector("#accName").value,
     "balance": balanceInt,
@@ -32,6 +23,8 @@ function addAccount() {
   update();
 }
 
+
+
 function removeAccount(ID) {
   /* "Do you want to remove this account?" warning box */
   accounts.splice(ID, 1);
@@ -39,26 +32,17 @@ function removeAccount(ID) {
 }
 
 
+
 function addTransaction() {
   
   let costStr = document.querySelector("#transCost").value;
-  let costInt = parseInt(costStr.replace('.', ''));
-
   
-  switch (countDecimalPlaces(costStr)) {
-    case 0:
-      costInt *= 100;
-      break;
-    case 1:
-      costInt *= 10;
-      break;
-    case 2:
-      costInt *= 1;
-      break;
-    default:
-      alert("Input Error: Currency input has too many decimal places.");
-      return;
+  if (countDecimalPlaces(costStr) > 2) {
+    alert("Input Error: Currency input has too many decimal places.");
+    return;
   }
+  
+  let costInt = fixDecimalPlaces(costStr)
   
   let transaction = {
     "name": document.querySelector("#transName").value,
@@ -76,11 +60,15 @@ function addTransaction() {
   update();
 }
 
+
+
 function removeTransaction(ID) {
   /* "Do you want to remove this transaction?" warning box */
   transactions.splice(ID, 1);
   update();
 }
+
+
 
 function applyTransaction(transaction) {
   accounts.forEach((account) => {
@@ -93,26 +81,19 @@ function applyTransaction(transaction) {
   console.log(`${transaction.accountName} is not a valid account name.`);
 }
 
+
+
 function applyIncome() {
   let incomeStr = document.querySelector("#income").value;
   let accountName = (document.querySelector("#incomeAccName").value).toLowerCase();
   let accountFound = false;
-  let incomeInt = parseInt(incomeStr.replace('.', ''));
   
-  switch (countDecimalPlaces(incomeStr)) {
-    case 0:
-      incomeInt *= 100;
-      break;
-    case 1:
-      incomeInt *= 10;
-      break;
-    case 2:
-      incomeInt *= 1;
-      break;
-    default:
-      alert("Input Error: Currency input has too many decimal places.");
-      return;
+   if (countDecimalPlaces(incomeStr) > 2) {
+    alert("Input Error: Currency input has too many decimal places.");
+    return;
   }
+  
+  let incomeInt = fixDecimalPlaces(incomeStr)
   
   accounts.forEach((account) => {
     if (accountName === account.name.toLowerCase() || accountName === "all" || accountName === "") {
@@ -128,6 +109,7 @@ function applyIncome() {
 }
 
 
+
 function countDecimalPlaces(numberStr) {
   let reachedDecimal = false;
   let numberOfDecimalPlaces = 0;
@@ -140,6 +122,7 @@ function countDecimalPlaces(numberStr) {
 }
 
 
+
 function updateDownloadHREF() {
   const accountsDL = document.querySelector("#accountsDL");
   const jsonAccounts = JSON.stringify(accounts);
@@ -149,6 +132,8 @@ function updateDownloadHREF() {
   accountsDL.download = "accounts.json";
 }
 
+
+
 function displayAsFloat(number, decimalPlaces) {
   let numberStr = number.toString();
   let sigFigs = numberStr.slice(0, numberStr.length - decimalPlaces);
@@ -157,6 +142,22 @@ function displayAsFloat(number, decimalPlaces) {
   
   return `${sigFigs}.${decimalFigs}`;
 }
+
+
+
+function fixDecimalPlaces(numberStr) {
+  let numberInt = parseInt(numberStr.replace('.', ''));
+  switch (countDecimalPlaces(numberStr)) {
+    case 0:
+      return numberInt *= 100;
+    case 1:
+      return numberInt *= 10;
+    case 2:
+      return numberInt *= 1;
+  }
+}
+
+
 
 function updateOverview() {
   let overview = `<table><tr><th colspan="3">Accounts</th</tr><tr><th>Account Name</th><th>Account Balance</th><th>Delete</th></tr>`;
@@ -181,6 +182,8 @@ function updateOverview() {
   document.querySelector("#subscriptionView").innerHTML = subscriptionView;
 }
 
+
+
 function update() {
   updateDownloadHREF();
   updateOverview();
@@ -188,6 +191,7 @@ function update() {
   localStorage.setItem("accountList", JSON.stringify(accounts));
   localStorage.setItem("transactionList", JSON.stringify(transactions));
 }
+
 
 
 let UKPound = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' });
