@@ -4,18 +4,20 @@
 function addAccount() {
 
   let balanceStr = document.querySelector("#accBal").value;
+  let percentFromIncomeStr = (document.querySelector("#accPercent").value / 100).toString();  /* Safe? Even with floats? Who knows! */
   
   if (countDecimalPlaces(balanceStr) > 2) {
     alert("Input Error: Currency input has too many decimal places.");
     return;
   }
   
-  let balanceInt = fixDecimalPlaces(balanceStr)
+  let balanceInt = toFixedPoint(balanceStr)
+  let percentFromIncomeInt = toFixedPoint(percentFromIncomeStr)
 
   let account = {
     "name": document.querySelector("#accName").value,
     "balance": balanceInt,
-    "percentFromIncome": document.querySelector("#accPercent").value / 100,
+    "percentFromIncome": percentFromIncomeInt,  
     "ID": accounts.length
   };
 
@@ -42,7 +44,7 @@ function addTransaction() {
     return;
   }
   
-  let costInt = fixDecimalPlaces(costStr)
+  let costInt = toFixedPoint(costStr)
   
   let transaction = {
     "name": document.querySelector("#transName").value,
@@ -93,12 +95,15 @@ function applyIncome() {
     return;
   }
   
-  let incomeInt = fixDecimalPlaces(incomeStr)
+  let incomeInt = toFixedPoint(incomeStr)
   
   accounts.forEach((account) => {
-    if (accountName === account.name.toLowerCase() || accountName === "all" || accountName === "") {
+    if (accountName === "all" || accountName === "") {
       accountFound = true;
-      account.balance += incomeInt * account.percentFromIncome;
+      account.balance += (incomeInt * account.percentFromIncome) / 100;  /* Safe? */
+    } else if (accountName === account.name.toLowerCase()) {  /* Will not make sense if iterating over a set of accounts */
+      accountFound = true;
+      account.balance += incomeInt;
     }
   })
   
@@ -123,6 +128,20 @@ function countDecimalPlaces(numberStr) {
 
 
 
+function toFixedPoint(numberStr) {
+  let numberInt = parseInt(numberStr.replace('.', ''));
+  switch (countDecimalPlaces(numberStr)) {
+    case 0:
+      return numberInt *= 100;
+    case 1:
+      return numberInt *= 10;
+    case 2:
+      return numberInt *= 1;
+  }
+}
+
+
+
 function updateDownloadHREF() {
   const accountsDL = document.querySelector("#accountsDL");
   const jsonAccounts = JSON.stringify(accounts);
@@ -141,20 +160,6 @@ function displayAsFloat(number, decimalPlaces) {
   
   
   return `${sigFigs}.${decimalFigs}`;
-}
-
-
-
-function fixDecimalPlaces(numberStr) {
-  let numberInt = parseInt(numberStr.replace('.', ''));
-  switch (countDecimalPlaces(numberStr)) {
-    case 0:
-      return numberInt *= 100;
-    case 1:
-      return numberInt *= 10;
-    case 2:
-      return numberInt *= 1;
-  }
 }
 
 
