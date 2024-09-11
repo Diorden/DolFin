@@ -10,6 +10,9 @@ A version of this program can be found at https://diorden.neocities.org/dolfin/d
 
 ### Version History
 
+a0.4.0
+- Added subscriptions that trigger automatically.
+
 a0.3.5
 - Specifying an account when entering income places entire income in specified account.
 
