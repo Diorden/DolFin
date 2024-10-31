@@ -22,6 +22,7 @@ function addAccount() {
     "ID": accounts.length
   };
 
+  console.table(account);
   accounts.push(account);
   update();
 }
@@ -49,6 +50,7 @@ function addTransaction() {
     "ID": transactions.length
   };
   
+  console.table(transaction);
   transactions.push(transaction);
   applyTransaction(transaction);
 
@@ -63,7 +65,6 @@ function addTransaction() {
 function addSubscription(transaction) {
   let periodCount = parseInt(document.querySelector("#periodCount").value);
   let subPeriod = document.querySelector("#subPeriod").value;
-  
   
   let subscription = {
       "name": transaction.name,
@@ -89,6 +90,8 @@ function addSubscription(transaction) {
 function removeTransaction(ID) {
   /* "Do you want to remove this transaction?" warning box */
   transactions.splice(ID, 1);
+  for (let index=0; index<transactions.length; index++)
+    transactions[index].ID = index;
   update();
 }
 
@@ -97,6 +100,9 @@ function removeTransaction(ID) {
 function removeAccount(ID) {
   /* "Do you want to remove this account?" warning box */
   accounts.splice(ID, 1);
+  for (let index=0; index<accounts.length; index++)
+    accounts[index].ID = index;
+    
   update();
 }
 
@@ -105,6 +111,8 @@ function removeAccount(ID) {
 function removeSubscription(ID) {
   /* "Do you want to remove this subscription?" warning box */
   subscriptions.splice(ID, 1);
+  for (let index=0; index<subscriptions.length; index++)
+    subscriptions[index].ID = index;
   update();
 }
 
@@ -155,17 +163,29 @@ function applyIncome() {
     return;
   }
   
-  let incomeInt = strToFixedPoint(incomeStr)
+  let incomeInt = strToFixedPoint(incomeStr);
+  let remainingBalance = incomeInt;
+  let amount = 0;
   
-  accounts.forEach((account) => {
-    if (accountName === "all" || accountName === "") {
-      accountFound = true;
-      account.balance += (incomeInt * account.percentFromIncome) / 100;  /* Safe? */
-    } else if (accountName === account.name.toLowerCase()) {  /* Will not make sense if iterating over a set of accounts */
-      accountFound = true;
-      account.balance += incomeInt;
-    }
-  })
+  while (remainingBalance > 0) {
+    accounts.forEach((account) => {
+      if (accountName === "all" || accountName === "") {
+        accountFound = true;
+          amount = (incomeInt * account.percentFromIncome) / 100;  /* Safe? */
+          amount = Math.ceil(amount);
+          if (remainingBalance - amount >= 0) {
+            account.balance += amount;
+            remainingBalance -= amount;
+          } else {
+            account.balance += remainingBalance;
+            remainingBalance = 0;
+          }
+      } else if (accountName === account.name.toLowerCase()) {  /* Will not make sense if iterating over a set of accounts */
+        accountFound = true;
+        account.balance += incomeInt;
+      }
+    })
+  }
   
   if (!accountFound)
     alert(`${accountName} is not a valid account name.`);
@@ -219,14 +239,41 @@ function FixedPointToStr(number, decimalPlaces) {
 
 function updateDownloadButtonHREF() {
   const accountsDL = document.querySelector("#accountsDL");
-  const jsonAccounts = JSON.stringify(accounts);
-  const blob = new Blob([jsonAccounts], { type: 'application/json' });
+  
+  let data = {
+    "accounts": accounts,
+    "transactions": transactions,
+    "subscriptions": subscriptions,  
+  };
+  
+  const jsonData = JSON.stringify(data);
+  const blob = new Blob([jsonData], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   accountsDL.href = url;
-  accountsDL.download = "accounts.json";
+  accountsDL.download = "data.json";
 }
 
+function accountsUpload() {
+  let dataFile = document.querySelector('#accountsUL').files[0];
+  let reader = new FileReader();
+  
+  reader.addEventListener('load', () => { parseJSONFile(JSON.parse(reader.result)); }
+  );
+  
+  reader.readAsText(dataFile);   
+}
 
+function parseJSONFile(dataJSON) {
+  console.log("Parsing file...");
+  console.log(dataJSON);
+  accounts = dataJSON.accounts;
+  transactions = dataJSON.transactions;
+  subscriptions = dataJSON.subscriptions;
+  parseDates();
+  console.log("...file parsed");
+  
+  update();
+}
 
 function updateOverview() {
   let accountView = `<table><tr><th colspan="3">Accounts</th</tr><tr><th>Account Name</th><th>Account Balance</th><th>Delete</th></tr>`;
@@ -244,8 +291,6 @@ function updateOverview() {
   
   subscriptions.forEach((sub) => {
     const { name, cost, accountName, subPeriod, periodCount, renewalDate, category, ID} = sub;
-    console.log(renewalDate);
-    console.log(Date(Date.now()));
     subscriptionView += `<tr><td>${name}</td><td>${FixedPointToStr(cost, 2)}</td><td>${accountName}</td><td>${subPeriod}</td><td>${parseDate(renewalDate)}</td><td>${category}<td><button class="deleteButton" onclick="removeSubscription(${ID})">X</button></td></tr>`; 
   })
     
@@ -257,13 +302,16 @@ function updateOverview() {
 
 
 function update() {  
+  console.log("Updating database...");
   applySubscriptions();
-  updateDownloadButtonHREF();
-  updateOverview();
   
   localStorage.setItem("accountList", JSON.stringify(accounts));
   localStorage.setItem("transactionList", JSON.stringify(transactions));
   localStorage.setItem("subscriptionList", JSON.stringify(subscriptions));
+  
+  updateOverview();
+  updateDownloadButtonHREF();
+  console.log("...database updated");
 }
 
 
@@ -271,13 +319,11 @@ function update() {
 // Date Functions //
 
 function parseDate(date) {
-  console.log(typeof date);
   let dateStr = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;  /* dd-mm-yyyy */
   return dateStr;
 }
 
 function nextRenewalDate(sub) {
-  console.log(typeof sub.renewalDate);
    switch (sub.subPeriod) {
     case "Daily":
       sub.renewalDate.setDate(sub.renewalDate.getDate() + sub.periodCount);
@@ -309,8 +355,8 @@ function parseDates() {
 
 // Init code //
 
-let accounts = JSON.parse(localStorage.getItem("accountList")) || [];
-let transactions = JSON.parse(localStorage.getItem("transactionList")) || [];
-let subscriptions = JSON.parse(localStorage.getItem("subscriptionList")) || [];
+var accounts = JSON.parse(localStorage.getItem("accountList")) || [];
+var transactions = JSON.parse(localStorage.getItem("transactionList")) || [];
+var subscriptions = JSON.parse(localStorage.getItem("subscriptionList")) || [];
 parseDates();
 update();

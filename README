@@ -10,6 +10,9 @@ A version of this program can be found at https://diorden.neocities.org/dolfin/d
 
 ### Version History
 
+a0.5.0
+- It is now possible to both save and load data to and from a file.
+
 a0.4.0
 - Added subscriptions that trigger automatically.
 
